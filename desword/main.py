@@ -1,8 +1,7 @@
 import glob
 import os
 import sys
-from markdown import Markdown, inlinepatterns
-import xml.etree.ElementTree as etree
+from parsing.md import CustomMarkdownParser
 
 input = sys.argv[1]
 output = sys.argv[2]
@@ -14,47 +13,20 @@ files = glob.glob(f"{output}*")
 for f in files:
     os.remove(f)
 
-m = Markdown()
-
-m.inlinePatterns.deregister('link')
-
-class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
-    def __init__(self, pattern, md):
-        super().__init__(pattern, md=md)
-
-    def handleMatch(self, m, data):
-        text, index, handled = self.getText(data, m.end(0))
-
-        if not handled:
-            return None, None, None
-
-        href, title, index, handled = self.getLink(data, index)
-        if not handled:
-            return None, None, None
-
-        el = etree.Element("a")
-        el.text = text
-
-        # Prepend output folder path (or url) to link
-        link = output + href + ".html"
-        self.links.append({"text": text, "href": link})
-        el.set("href", link)
-
-        if title is not None:
-            el.set("title", title)
-
-        return el, m.start(0), index
-
-m.inlinePatterns.register(CustomLinkInlineProcessor(inlinepatterns.LINK_RE, m), 'link', 160)
+m = CustomMarkdownParser(output)
 
 page_graph = {}
 
+
 class Page:
     def __init__(self, m, lines):
-        m.inlinePatterns['link'].links = []
-        self.html = m.convert(lines)
-        self.links = m.inlinePatterns['link'].links
+        self.html, self.links = m.generate_html_and_links(lines)
         self.backlinks = {}
+
+    def add_backlinks(self):
+        for k, v in self.backlinks.items():
+            self.html += f'\nFrom <a href="{k}">{k}</a> link: {v}'
+
 
 for root, _, files in os.walk(input):
     for file in files:
@@ -64,8 +36,6 @@ for root, _, files in os.walk(input):
             # Maybe move the static files into the same folder?
             continue
 
-        # Clear links array
-        m.inlinePatterns['link'].links = []
         input_location = os.path.join(root, file)
         output_location = os.path.join(output, file_parts[0] + ".html")
         with open(input_location) as f:
@@ -83,7 +53,6 @@ for out, page in page_graph.items():
         page_graph[link["href"]].backlinks[out] = link
 
 for out, page in page_graph.items():
-    for k, v in page.backlinks.items():
-        page.html += f"\nFrom {k} link: {v}"
+    page.add_backlinks()
     with open(out, "w") as f:
         f.write(page.html)
