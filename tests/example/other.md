@@ -1,0 +1,3 @@
+# lamo
+
+[fruity](gloopy2)
