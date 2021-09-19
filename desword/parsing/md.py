@@ -1,6 +1,7 @@
 from markdown import Markdown, inlinepatterns
 import xml.etree.ElementTree as etree
 
+
 class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
     def __init__(self, pattern, md, output_path):
         super().__init__(pattern, md=md)
@@ -29,13 +30,15 @@ class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
 
         return el, m.start(0), index
 
+
 class CustomMarkdownParser:
 
     def __init__(self, output_path):
         self.markdown = Markdown()
         self.markdown.inlinePatterns.deregister('link')
-        self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(inlinepatterns.LINK_RE, self.markdown, output_path), 'link', 160)
-    
+        self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(
+            inlinepatterns.LINK_RE, self.markdown, output_path), 'link', 160)
+
     def generate_html_and_links(self, lines):
         self.markdown.inlinePatterns['link'].links = []
         html = self.markdown.convert(lines)
