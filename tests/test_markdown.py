@@ -1,11 +1,19 @@
 import pytest
+import tempfile
 
-from desword.parsing.md import CustomMarkdownParser
+from desword.md import CustomMarkdownParser
 
 
 @pytest.fixture
-def markdown_parser():
-    return CustomMarkdownParser('./generic/path/')
+def temp_dir():
+    tmp = tempfile.TemporaryDirectory()
+    yield tmp.name + "/"
+    tmp.cleanup()
+
+
+@pytest.fixture
+def markdown_parser(temp_dir):
+    return CustomMarkdownParser(temp_dir)
 
 
 def test_regular_generation(markdown_parser):
@@ -17,4 +25,5 @@ def test_regular_generation(markdown_parser):
 def test_link_generation(markdown_parser):
     _, links = markdown_parser.generate_html_and_links('# Hi\n[bbb](tengu)')
     assert len(links) == 1
-    assert links[0] == {'href': './generic/path/tengu.html', 'text': 'bbb'}
+    assert links[0] == {
+        'href': f'{markdown_parser.output_path}tengu.html', 'text': 'bbb'}

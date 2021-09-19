@@ -21,7 +21,7 @@ class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
         el.text = text
 
         # Prepend output folder path (or url) to link
-        link = self.output_path + href + ".html"
+        link = f"{self.output_path}{href}.html"
         self.links.append({"text": text, "href": link})
         el.set("href", link)
 
@@ -35,9 +35,10 @@ class CustomMarkdownParser:
 
     def __init__(self, output_path):
         self.markdown = Markdown()
+        self.output_path = output_path
         self.markdown.inlinePatterns.deregister('link')
         self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(
-            inlinepatterns.LINK_RE, self.markdown, output_path), 'link', 160)
+            inlinepatterns.LINK_RE, self.markdown, self.output_path), 'link', 160)
 
     def generate_html_and_links(self, lines):
         self.markdown.inlinePatterns['link'].links = []
