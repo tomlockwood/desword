@@ -1,14 +1,7 @@
 import pytest
-import tempfile
+
 
 from desword.md import CustomMarkdownParser
-
-
-@pytest.fixture
-def temp_dir():
-    tmp = tempfile.TemporaryDirectory()
-    yield tmp.name + "/"
-    tmp.cleanup()
 
 
 @pytest.fixture

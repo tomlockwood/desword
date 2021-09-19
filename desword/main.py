@@ -1,38 +1,21 @@
-import glob
 import os
 import sys
 from md import CustomMarkdownParser
+from file_handler import FileHandler
 from pathlib import Path
 
 input = sys.argv[1]
 output = sys.argv[2]
 
-if not output.strip():
-    raise Exception('Output blank')
-
-if not output[-1] == os.path.sep:
-    output = f"{output}{os.path.sep}"
-
-files = glob.glob(f"{output}*")
-print(files)
-directories = []
-for f in files:
-    if not os.path.isfile(f):
-        directories.append(f)
-    else:
-        os.remove(f)
-
-for d in directories:
-    os.rmdir(d)
+f = FileHandler(input, output)
 
 m = CustomMarkdownParser(output)
 
-page_graph = {}
-
 
 class Page:
-    def __init__(self, m, lines):
-        self.html, self.links = m.generate_html_and_links(lines)
+    def __init__(self, html, links):
+        self.html = html
+        self.links = links
         self.backlinks = {}
 
     def add_backlinks(self):
@@ -40,37 +23,24 @@ class Page:
             self.html += f'\nFrom <a href="{k}">{k}</a> link: {v}'
 
 
-for root, dirs, files in os.walk(input):
-    input_relative_path = os.path.relpath(
-        root, input)
-    output_relative_path = os.path.join(
-        output, input_relative_path)
-    Path(output_relative_path).mkdir(parents=True, exist_ok=True)
-    for file in files:
-        file_parts = os.path.splitext(file)
-        # Ignore non-markdown files
-        if file_parts[1] != '.md':
-            # Maybe move the static files into the same folder?
-            continue
+f.generate_file_lists()
 
-        input_location = os.path.join(root, file)
-        output_location = os.path.join(
-            output_relative_path, file_parts[0] + ".html")
-        with open(input_location) as f:
-            lines = f.read()
-        page_graph[output_location] = Page(m, lines)
+for k, v in f.page_graph.items():
+
+    html, links = m.generate_html_and_links(v['lines'])
+    f.page_graph[k]['page'] = Page(html, links)
 
 missing_pages = []
 
-for out, page in page_graph.items():
-    for link in page.links:
-        if not page_graph.get(link["href"]):
+for out, node in f.page_graph.items():
+    for link in node['page'].links:
+        if not f.page_graph.get(link["href"]):
             missing_pages.append(link)
             continue
 
-        page_graph[link["href"]].backlinks[out] = link
+        f.page_graph[link["href"]]["page"].backlinks[out] = link
 
-for out, page in page_graph.items():
-    page.add_backlinks()
+for out, node in f.page_graph.items():
+    node["page"].add_backlinks()
     with open(out, "w") as f:
-        f.write(page.html)
+        f.write(node["page"].html)
