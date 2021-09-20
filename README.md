@@ -1,6 +1,6 @@
 # Desword - A markdown worldbuilder's assistant
 
-![example branch parameter](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg?branch=main)
+![example branch parameter](https://github.com/github/desword/actions/workflows/ci.yml/badge.svg?branch=main)
 
 ## Goal
 
