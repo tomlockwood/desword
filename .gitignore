@@ -2,3 +2,4 @@ venv/
 tests/tmp/
 .pytest_cache/
 __pycache__/
+.coverage

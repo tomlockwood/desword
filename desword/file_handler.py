@@ -31,8 +31,8 @@ class FileHandler:
             else:
                 os.unlink(path)
 
-    def generate_file_lists(self):
-        self.page_graph = {}
+    def generate_file_graph(self):
+        self.file_graph = {}
         self.other_files = []
         for root, _, files in os.walk(self.input_path):
             input_relative_path = os.path.relpath(
@@ -57,5 +57,6 @@ class FileHandler:
                 with open(input_location) as f:
                     lines = f.read()
 
-                self.page_graph[output_location] = {
+                self.file_graph[output_location] = {
                     "input": input_location, "lines": lines}
+        return self.file_graph

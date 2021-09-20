@@ -1,0 +1,1 @@
+python desword/main.py tests/example/ tests/tmp/

@@ -1,6 +1,7 @@
 # Desword - A markdown worldbuilder's assistant
 
 Main tests: ![Main Tests](https://github.com/tomlockwood/desword/actions/workflows/ci.yml/badge.svg?branch=main)
+
 Dev tests: ![Dev Tests](https://github.com/tomlockwood/desword/actions/workflows/ci.yml/badge.svg?branch=main)
 
 ## Goal
