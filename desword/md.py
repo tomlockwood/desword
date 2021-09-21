@@ -1,17 +1,11 @@
 from markdown import Markdown, inlinepatterns
 import xml.etree.ElementTree as etree
 
+
 class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
     def __init__(self, pattern, md, path):
         super().__init__(pattern, md=md)
         self.path = path
-    
-    @property
-    def href_root_path(self):
-        return self.href_override or self.output_path
-    
-    def href_path(self, href):
-        return f"{self.href_root_path}{href}.html"
 
     def handleMatch(self, m, data):
         text, index, handled = self.getText(data, m.end(0))
