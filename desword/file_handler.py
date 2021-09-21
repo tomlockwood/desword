@@ -37,3 +37,7 @@ class FileHandler:
                     root, file_base)
                 self.file_graph[relative_location] = {"lines": lines}
         return self.file_graph
+
+    def write_page(self, out, page):
+        with open(self.path.output_file_location(out), "w") as f:
+            f.write(page.html)

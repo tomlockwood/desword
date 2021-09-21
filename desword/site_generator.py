@@ -56,5 +56,4 @@ class SiteGenerator:
         # Add backlinks to html and output finished HTML to filesystem
         for out, node in self.file_graph.items():
             node["page"].add_backlinks()
-            with open(self.path_data.output_file_location(out), "w") as f:
-                f.write(node["page"].html)
+            self.file_handler.write_page(out, node["page"])
