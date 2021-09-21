@@ -1,1 +1,1 @@
-python desword/main.py tests/example/ tests/tmp/
+python desword/main.py tests/example/ tests/tmp/ "www.example.com/butt/"

@@ -5,8 +5,8 @@ from desword.md import CustomMarkdownParser
 
 
 @pytest.fixture
-def markdown_parser(temp_dir):
-    return CustomMarkdownParser(temp_dir)
+def markdown_parser(path_data):
+    return CustomMarkdownParser(path_data)
 
 
 def test_regular_generation(markdown_parser):
@@ -19,4 +19,4 @@ def test_link_generation(markdown_parser):
     _, links = markdown_parser.generate_html_and_links('# Hi\n[bbb](tengu)')
     assert len(links) == 1
     assert links[0] == {
-        'href': f'{markdown_parser.output_path}tengu.html', 'text': 'bbb'}
+        'href': f'{markdown_parser.path.output}tengu.html', 'rel': 'tengu', 'text': 'bbb'}
