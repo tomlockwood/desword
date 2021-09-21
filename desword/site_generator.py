@@ -15,10 +15,11 @@ class Page:
 
 
 class SiteGenerator:
-    def __init__(self, input, output, href_base):
+    def __init__(self, input, output, href_base=None):
         self.path_data = PathData(input, output, href_base)
         self.file_handler = FileHandler(self.path_data)
         self.markdown_parser = CustomMarkdownParser(self.path_data)
+        self.missing_pages = []
 
         self.file_graph = self.file_handler.generate_file_graph()
 
@@ -36,8 +37,6 @@ class SiteGenerator:
             self.file_graph[k]['page'] = Page(html, links)
 
     def record_link_edges(self):
-        self.missing_pages = []
-
         # For every node in the file_graph...
         for source, node in self.file_graph.items():
             # For every link in that node's page...
