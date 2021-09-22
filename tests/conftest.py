@@ -1,7 +1,7 @@
+
 import os
 import pytest
 import tempfile
-from desword.path import PathData
 import sys
 sys.path.append("desword")
 
@@ -24,4 +24,5 @@ def temp_in_out_dirs(temp_dir):
 
 @pytest.fixture
 def path_data(temp_in_out_dirs):
+    from lib import PathData
     yield PathData(temp_in_out_dirs['in'], temp_in_out_dirs['out'])

@@ -1,6 +1,4 @@
-from md import CustomMarkdownParser
-from file_handler import FileHandler
-from path import PathData
+import lib
 
 
 class Page:
@@ -16,9 +14,9 @@ class Page:
 
 class SiteGenerator:
     def __init__(self, input, output, href_base=None):
-        self.path_data = PathData(input, output, href_base)
-        self.file_handler = FileHandler(self.path_data)
-        self.markdown_parser = CustomMarkdownParser(self.path_data)
+        self.path_data = lib.PathData(input, output, href_base)
+        self.file_handler = lib.FileHandler(self.path_data)
+        self.markdown_parser = lib.CustomMarkdownParser(self.path_data)
         self.missing_pages = []
 
         self.file_graph = self.file_handler.generate_file_graph()

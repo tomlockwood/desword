@@ -1,7 +1,7 @@
 import pytest
 
 
-from desword.md import CustomMarkdownParser
+from desword.lib import CustomMarkdownParser
 
 
 @pytest.fixture

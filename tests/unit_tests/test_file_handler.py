@@ -1,4 +1,4 @@
-from desword.file_handler import FileHandler
+from desword.lib import FileHandler
 import os
 
 
