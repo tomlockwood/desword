@@ -1,17 +1,6 @@
 import lib
 
 
-class Page:
-    def __init__(self, html, links):
-        self.html = html
-        self.links = links
-        self.backlinks = {}
-
-    def add_backlinks(self):
-        for k, v in self.backlinks.items():
-            self.html += f'\nFrom <a href="{k}">{k}</a> link: {v}'
-
-
 class SiteGenerator:
     def __init__(self, input, output, href_base=None):
         self.path_data = lib.PathData(input, output, href_base)
@@ -32,7 +21,7 @@ class SiteGenerator:
         for k, v in self.file_graph.items():
             html, links = self.markdown_parser.generate_html_and_links(
                 v['lines'])
-            self.file_graph[k]['page'] = Page(html, links)
+            self.file_graph[k]['page'] = lib.Page(html, links)
 
     def record_link_edges(self):
         # For every node in the file_graph...

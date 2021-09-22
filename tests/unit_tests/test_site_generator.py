@@ -1,4 +1,4 @@
-from desword.site_generator import SiteGenerator
+from desword import SiteGenerator
 import os
 import pytest
 
