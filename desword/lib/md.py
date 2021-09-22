@@ -3,9 +3,9 @@ import xml.etree.ElementTree as etree
 
 
 class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
-    def __init__(self, pattern, md, output_path):
+    def __init__(self, pattern, md, path):
         super().__init__(pattern, md=md)
-        self.output_path = output_path
+        self.path = path
 
     def handleMatch(self, m, data):
         text, index, handled = self.getText(data, m.end(0))
@@ -21,8 +21,8 @@ class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
         el.text = text
 
         # Prepend output folder path (or url) to link
-        link = f"{self.output_path}{href}.html"
-        self.links.append({"text": text, "href": link})
+        link = self.path.href(href)
+        self.links.append({"text": text, "href": link, "rel": href})
         el.set("href", link)
 
         if title is not None:
@@ -33,12 +33,12 @@ class CustomLinkInlineProcessor(inlinepatterns.LinkInlineProcessor):
 
 class CustomMarkdownParser:
 
-    def __init__(self, output_path):
+    def __init__(self, path):
         self.markdown = Markdown()
-        self.output_path = output_path
+        self.path = path
         self.markdown.inlinePatterns.deregister('link')
         self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(
-            inlinepatterns.LINK_RE, self.markdown, self.output_path), 'link', 160)
+            inlinepatterns.LINK_RE, self.markdown, self.path), 'link', 160)
 
     def generate_html_and_links(self, lines):
         self.markdown.inlinePatterns['link'].links = []
