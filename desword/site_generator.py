@@ -2,10 +2,16 @@ import lib
 
 
 class SiteGenerator:
-    def __init__(self, input, output, href_base=None):
+    def __init__(self, input, output, href_base=None, page_template_path=None):
         self.path_data = lib.PathData(input, output, href_base)
         self.file_handler = lib.FileHandler(self.path_data)
         self.markdown_parser = lib.CustomMarkdownParser(self.path_data)
+        if not page_template_path:
+            page_template_path = 'desword/templates/page.html'
+
+        with open(page_template_path) as f:
+            self.page_template = f.read()
+
         self.missing_pages = []
 
         self.file_graph = self.file_handler.generate_file_graph()
@@ -19,9 +25,10 @@ class SiteGenerator:
     def add_pages_to_graph(self):
         # Parse Markdown to generate HTML and links on pages
         for k, v in self.file_graph.items():
-            html, links = self.markdown_parser.generate_html_and_links(
+            body, links = self.markdown_parser.generate_html_and_links(
                 v['lines'])
-            self.file_graph[k]['page'] = lib.Page(html, links)
+            self.file_graph[k]['page'] = lib.Page(
+                body, links, self.page_template)
 
     def record_link_edges(self):
         # For every node in the file_graph...
@@ -42,5 +49,5 @@ class SiteGenerator:
     def output_html(self):
         # Add backlinks to html and output finished HTML to filesystem
         for out, node in self.file_graph.items():
-            node["page"].add_backlinks()
+            node["page"].generate_html()
             self.file_handler.write_page(out, node["page"])
