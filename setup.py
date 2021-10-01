@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='desword',
-    version='0.0.4',
+    version='0.0.5',
     author='Tom Lockwood',
     author_email='tom@lockwood.dev',
     description="A markdown worldbuilder's assistant",
@@ -17,4 +17,5 @@ setuptools.setup(
     },
     packages=['desword', 'desword.lib', 'desword.templates'],
     install_requires=['Markdown==3.3.4'],
+    include_package_data=True,
 )
