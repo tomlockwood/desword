@@ -24,5 +24,5 @@ def temp_in_out_dirs(temp_dir):
 
 @pytest.fixture
 def path_data(temp_in_out_dirs):
-    from lib import PathData
-    yield PathData(temp_in_out_dirs['in'], temp_in_out_dirs['out'])
+    from lib import Path
+    yield Path(temp_in_out_dirs['in'], temp_in_out_dirs['out'])

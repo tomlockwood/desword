@@ -38,10 +38,10 @@ class CustomMarkdownParser:
         self.path = path
         self.markdown.inlinePatterns.deregister('link')
         self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(
-            inlinepatterns.LINK_RE, self.markdown, self.path), 'link', 160)
+            inlinepatterns.LINK_RE, self.markdown, path), 'link', 160)
 
-    def generate_html_and_links(self, lines):
+    def generate_html_and_links(self, node):
         self.markdown.inlinePatterns['link'].links = []
-        html = self.markdown.convert(lines)
+        html = self.markdown.convert(node['lines'])
         links = self.markdown.inlinePatterns['link'].links
         return html, links
