@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='desword',
-    version='0.0.5',
+    version='0.0.1',
     author='Tom Lockwood',
     author_email='tom@lockwood.dev',
     description="A markdown worldbuilder's assistant",
