@@ -21,4 +21,4 @@ def test_file_graph_built(path_data):
     f = FileHandler(path_data)
     f.empty_output()
     f.generate_file_graph()
-    assert f.file_graph == {'depth/example': {'lines': '# Hallo'}}
+    assert f.file_graph['depth/example']['lines'] == '# Hallo'

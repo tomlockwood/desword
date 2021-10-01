@@ -23,7 +23,7 @@ class FileHandler:
         for root, _, files in os.walk(self.path.input):
             for file in files:
                 file_path = self.path.file(root, file)
-                node = {"path": file_path}
+                node = {"file": file_path}
                 # Ignore non-markdown files
                 if file_path.is_markdown:
                     with open(os.path.join(root, file)) as f:
@@ -33,7 +33,7 @@ class FileHandler:
         return self.file_graph
 
     def write(self, node):
-        node_file = node["path"]
+        node_file = node["file"]
         Path(node_file.output_folder).mkdir(parents=True, exist_ok=True)
         if node_file.is_markdown:
             with open(node_file.output_path, "w") as f:

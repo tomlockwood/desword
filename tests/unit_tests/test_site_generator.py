@@ -21,15 +21,20 @@ def test_site_generator_no_markdown_file(site_generator):
 
 
 def test_add_page_to_graph(site_generator):
+    def obj(): return None
+    obj.is_markdown = True
     site_generator.file_graph = {
-        "a": {"lines": " # Hi"}}
+        "a": {"lines": " # Hi", "file": obj}}
     site_generator.add_pages_to_graph()
     assert site_generator.file_graph['a'].get('page')
 
 
 def test_record_link_edges(site_generator):
+    def obj(): return None
+    obj.is_markdown = True
+    obj.href = ""
     site_generator.file_graph = {
-        "a": {"lines": " # Hi\n Augh [hi](hello/butt)"}, "b": {"lines": "[aaa](a)"}}
+        "a": {"lines": " # Hi\n Augh [hi](hello/butt)", "file": obj}, "b": {"lines": "[aaa](a)", "file": obj}}
     site_generator.add_pages_to_graph()
     assert site_generator.file_graph['a'].get('page')
     site_generator.record_link_edges()

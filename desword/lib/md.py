@@ -35,6 +35,7 @@ class CustomMarkdownParser:
 
     def __init__(self, path):
         self.markdown = Markdown()
+        self.path = path
         self.markdown.inlinePatterns.deregister('link')
         self.markdown.inlinePatterns.register(CustomLinkInlineProcessor(
             inlinepatterns.LINK_RE, self.markdown, path), 'link', 160)
