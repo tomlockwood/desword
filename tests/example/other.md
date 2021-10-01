@@ -1,3 +1,3 @@
 # lamo
 
-[fruity](gloopy2)
+[fruity (broken)](gloopy2)
