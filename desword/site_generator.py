@@ -1,11 +1,11 @@
-import lib
+from .lib import Path, FileHandler, CustomMarkdownParser, Page
 
 
 class SiteGenerator:
     def __init__(self, input, output, href_base=None, page_template_path=None):
-        self.path_data = lib.Path(input, output, href_base)
-        self.file_handler = lib.FileHandler(self.path_data)
-        self.markdown_parser = lib.CustomMarkdownParser(self.path_data)
+        self.path_data = Path(input, output, href_base)
+        self.file_handler = FileHandler(self.path_data)
+        self.markdown_parser = CustomMarkdownParser(self.path_data)
         if not page_template_path:
             page_template_path = 'desword/templates/page.html'
 
@@ -29,7 +29,7 @@ class SiteGenerator:
                 continue
             body, links = self.markdown_parser.generate_html_and_links(
                 node)
-            self.file_graph[source]['page'] = lib.Page(
+            self.file_graph[source]['page'] = Page(
                 body, links, self.page_template)
 
     def record_link_edges(self):
