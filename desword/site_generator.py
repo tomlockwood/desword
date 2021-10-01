@@ -1,4 +1,6 @@
 from .lib import Path, FileHandler, CustomMarkdownParser, Page
+import os
+import sys
 
 
 class SiteGenerator:
@@ -7,7 +9,8 @@ class SiteGenerator:
         self.file_handler = FileHandler(self.path_data)
         self.markdown_parser = CustomMarkdownParser(self.path_data)
         if not page_template_path:
-            page_template_path = 'desword/templates/page.html'
+            d = os.path.dirname(sys.modules['desword'].__file__)
+            page_template_path = os.path.join(d, "templates", "page.html")
 
         with open(page_template_path) as f:
             self.page_template = f.read()
